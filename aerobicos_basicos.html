@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aerobicos basicos</title>
+    <link rel="stylesheet" href="aerobicos_basicos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="aerobicos_basicos.js" defer></script>
+</head>
+<body>
+    <!-------------------------------------->
+    <!--|estructuracion_aerobicos_basicos|-->
+    <!-------------------------------------->
+    <header class="encabezado">
+        <h1>Aeróbicos Básicos</h1>
+        <p>Escribe los minutos de cada ejercicio y márcalo cuando termines.</p>
+    </header>
+    <!-- Contenido principal de la página -->
+    <main>
+        <!-- Sección donde la persona escribe su nombre (se guarda en localStorage) -->
+        <section class="usuario">
+            <label for="nombre">Tu nombre</label>
+            <input type="text" id="nombre" placeholder="Escribe tu nombre">
+            <!-- Aquí JavaScript muestra el saludo -->
+            <p id="saludo"></p>
+        </section>
+        <!-- Contenedor de las tres tarjetas de ejercicios -->
+        <section class="tarjetas">
+            <!-- Tarjeta 1: Jumping Jacks. data-id identifica el ejercicio en JS -->
+            <article class="tarjeta" data-id="saltos">
+                <!-- Emoji que sirve de icono -->
+                <div class="icono">🤸</div>
+                <h2>Jumping Jacks</h2>
+                <p>Salta abriendo piernas y brazos al mismo tiempo.</p>
+                <!-- Campo para los minutos que se hicieron -->
+                <label>Minutos</label>
+                <input type="number" class="minutos" min="0" max="60" placeholder="0">
+                <!-- Botón para marcar el ejercicio como terminado -->
+                <button class="btn-hecho">Marcar como hecho</button>
+                <!-- Texto que muestra si está pendiente o hecho -->
+                <span class="estado">Pendiente</span>
+            </article>
+            <!-- Fin de la tarjeta 3 -->
+            <!-- Fin de la tarjeta 2 -->
+            <!-- Fin de la tarjeta 1 -->
+            <!-- Tarjeta 2: Rodillas altas -->
+            <article class="tarjeta" data-id="rodillas">
+                <!-- Emoji que sirve de icono -->
+                <div class="icono">🏃</div>
+                <h2>Rodillas altas</h2>
+                <p>Trota en el lugar subiendo las rodillas a la cintura.</p>
+                <!-- Campo para los minutos que se hicieron -->
+                <label>Minutos</label>
+                <input type="number" class="minutos" min="0" max="60" placeholder="0">
+                <!-- Botón para marcar el ejercicio como terminado -->
+                <button class="btn-hecho">Marcar como hecho</button>
+                <!-- Texto que muestra si está pendiente o hecho -->
+                <span class="estado">Pendiente</span>
+            </article>
+            <!-- Tarjeta 3: Saltar la cuerda -->
+            <article class="tarjeta" data-id="cuerda">
+                <!-- Emoji que sirve de icono -->
+                <div class="icono">🪢</div>
+                <h2>Saltar la cuerda</h2>
+                <p>Salta con ambos pies y gira la cuerda con las muñecas.</p>
+                <!-- Campo para los minutos que se hicieron -->
+                <label>Minutos</label>
+                <input type="number" class="minutos" min="0" max="60" placeholder="0">
+                <!-- Botón para marcar el ejercicio como terminado -->
+                <button class="btn-hecho">Marcar como hecho</button>
+                <!-- Texto que muestra si está pendiente o hecho -->
+                <span class="estado">Pendiente</span>
+            </article>
+        </section>
+        <!-- Resumen del progreso del día -->
+        <section class="resumen">
+            <h2>Tu progreso</h2>
+            <!-- Barra: el div interior crece según los ejercicios hechos -->
+            <div class="barra"><div id="relleno"></div></div>
+            <!-- Texto con ejercicios completados y minutos totales -->
+            <p id="textoProgreso"></p>
+            <!-- Botón que borra todos los datos guardados -->
+            <button id="btnReiniciar">Reiniciar todo</button>
+        </section>
+    </main>
+</body>
+</html>

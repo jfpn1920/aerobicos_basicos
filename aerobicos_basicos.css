@@ -1,0 +1,74 @@
+/* ===== Variables de color ===== */
+:root {
+  --fondo: #e8f4f1;      /* fondo general aguamarina suave */
+  --tinta: #12343b;      /* color del texto */
+  --blanco: #ffffff;     /* fondo de tarjetas */
+  --coral: #ff6b5b;      /* acento del ejercicio 1 */
+  --azul: #2e86ab;       /* acento del ejercicio 2 */
+  --amarillo: #f2b705;   /* acento del ejercicio 3 */
+  --verde: #1f9d6b;      /* color de ejercicio completado */
+}
+/* ===== Reinicio básico de márgenes ===== */
+* {
+    box-sizing: border-box; /* el padding no agranda los elementos */
+    margin: 0;
+    padding: 0;
+}
+/* ===== Estilo general del cuerpo ===== */
+body { font-family: "Trebuchet MS", Verdana, sans-serif; background: var(--fondo); color: var(--tinta); line-height: 1.5; }
+/* ===== Encabezado ===== */
+.encabezado { background: var(--tinta); color: var(--blanco); text-align: center; padding: 40px 20px; }
+.encabezado h1 { font-size: 2.6rem; margin-bottom: 8px; }
+/* ===== Contenedor central ===== */
+main { max-width: 1000px; margin: 0 auto; padding: 30px 20px 50px; }
+/* ===== Sección del usuario ===== */
+.usuario { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 30px; }
+/* ===== Campos de texto y número ===== */
+input {
+    padding: 10px 12px;
+    border: 2px solid var(--tinta);
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+}
+/* El campo del nombre no se estira demasiado */
+.usuario input { max-width: 280px; }
+/* ===== Cuadrícula de tarjetas (se adapta al ancho) ===== */
+.tarjetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+/* ===== Tarjeta de ejercicio ===== */
+/* Fondo blanco, borde de color arriba y contenido en columna */
+.tarjeta { background: var(--blanco); border-top: 8px solid var(--coral); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+/* Cada tarjeta tiene su propio color de acento */
+.tarjeta[data-id="rodillas"] { border-top-color: var(--azul); }
+.tarjeta[data-id="cuerda"] { border-top-color: var(--amarillo); }
+/* Tamaño del emoji de cada tarjeta */
+.icono { font-size: 3rem; }
+/* ===== Botones ===== */
+button { padding: 12px; border: none; border-radius: 8px; background: var(--tinta); color: var(--blanco); font-size: 1rem; cursor: pointer; }
+button:hover { opacity: 0.85; }
+/* Borde visible al navegar con el teclado */
+button:focus-visible, input:focus-visible { outline: 3px solid var(--amarillo); }
+/* ===== Texto de estado ===== */
+.estado { font-weight: bold; color: #6b7f84; }
+/* ===== Tarjeta completada (la clase la agrega JavaScript) ===== */
+.tarjeta.hecha { background: #e3f6ec; }
+.tarjeta.hecha .estado { color: var(--verde); }
+.tarjeta.hecha .btn-hecho { background: var(--verde); }
+/* ===== Resumen de progreso ===== */
+.resumen { margin-top: 36px; background: var(--blanco); border-radius: 14px; padding: 24px; }
+/* Barra gris de fondo */
+.barra {
+    height: 18px;
+    background: #d5e3e0;
+    border-radius: 9px;
+    overflow: hidden;
+    margin: 14px 0;
+}
+/* Parte que se llena según el avance */
+#relleno {
+    height: 100%;
+    width: 0;
+    background: var(--verde);
+    transition: width 0.4s; /* animación suave al cambiar */
+}
+#btnReiniciar { margin-top: 12px; background: var(--coral); }
