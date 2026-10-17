@@ -1,85 +1,117 @@
-// ===== Configuración inicial =====
-const CLAVE = "aerobicosBasicos"; // clave con la que se guarda en localStorage
-let datos = { nombre: "", ejercicios: {} }; // toda la información de la app
-// ===== Referencias a elementos del HTML =====
+//-------------------------------------//
+//--|funcionalidad_aerobicos_basicos|--//
+//-------------------------------------//
+const CLAVE = "aerobicosBasicos";
+let datos = {
+    nombre: "",
+    ejercicios: {}
+};
 const inputNombre = document.getElementById("nombre");
 const saludo = document.getElementById("saludo");
 const tarjetas = document.querySelectorAll(".tarjeta");
 const relleno = document.getElementById("relleno");
 const textoProgreso = document.getElementById("textoProgreso");
 const btnReiniciar = document.getElementById("btnReiniciar");
-// ===== Funciones de localStorage =====
-// Lee los datos guardados (si existen) al abrir o refrescar la página
+//----------------------------//
+//--|cargar_datos_guardados|--//
+//----------------------------//
 function cargarDatos() {
     try {
         const guardado = localStorage.getItem(CLAVE);
-      if (guardado) datos = JSON.parse(guardado); // convierte el texto en objeto
+        if (guardado) {
+            datos = JSON.parse(guardado);
+        }
     } catch (error) {
-        console.error("No se pudieron leer los datos:", error);
+        console.error("Error al cargar los datos:", error);
     }
 }
-// Guarda el objeto "datos" como texto en localStorage
 function guardarDatos() {
     localStorage.setItem(CLAVE, JSON.stringify(datos));
 }
-// ===== Funciones de apoyo =====
-// Devuelve los datos de un ejercicio; si no existen, los crea vacíos
 function obtenerEjercicio(id) {
-    if (!datos.ejercicios[id]) datos.ejercicios[id] = { minutos: "", hecho: false };
+    if (!datos.ejercicios[id]) {
+        datos.ejercicios[id] = {
+            minutos: "",
+            hecho: false
+        };
+    }
     return datos.ejercicios[id];
 }
-// ===== Funciones que actualizan la pantalla =====
-// Muestra el saludo según el nombre guardado
+//--------------------------------//
+//--|mostrar_saludo_del_usuario|--//
+//--------------------------------//
 function pintarSaludo() {
     inputNombre.value = datos.nombre;
-    saludo.textContent = datos.nombre ? "¡Vamos, " + datos.nombre + "!" : "";
+    if (datos.nombre) {
+        saludo.textContent = "¡Vamos, " + datos.nombre + "!";
+    } else {
+        saludo.textContent = "";
+    }
 }
-// Dibuja una tarjeta con sus datos guardados
+//-------------------------------------//
+//--|actualizar_tarjeta_de_ejercicio|--//
+//-------------------------------------//
 function pintarTarjeta(tarjeta) {
-    const ejercicio = obtenerEjercicio(tarjeta.dataset.id);
+    const id = tarjeta.dataset.id;
+    const ejercicio = obtenerEjercicio(id);
+    const campoMinutos = tarjeta.querySelector(".minutos");
+    const botonHecho = tarjeta.querySelector(".btn-hecho");
     const estado = tarjeta.querySelector(".estado");
-    tarjeta.querySelector(".minutos").value = ejercicio.minutos; // restaura minutos
-    tarjeta.classList.toggle("hecha", ejercicio.hecho); // pinta si está hecha
-    tarjeta.querySelector(".btn-hecho").textContent = ejercicio.hecho ? "Desmarcar" : "Marcar como hecho";
-    estado.textContent = ejercicio.hecho ? "¡Completado!" : "Pendiente";
+    campoMinutos.value = ejercicio.minutos;
+    tarjeta.classList.toggle("hecha", ejercicio.hecho);
+    if (ejercicio.hecho) {
+        botonHecho.textContent = "Desmarcar";
+        estado.textContent = "¡Completado!";
+    } else {
+        botonHecho.textContent = "Marcar como hecho";
+        estado.textContent = "Pendiente";
+    }
 }
-// Calcula ejercicios hechos y minutos totales
 function pintarProgreso() {
-    let hechos = 0, totalMinutos = 0; // contadores en cero
-    tarjetas.forEach(function (tarjeta) {
-        const ejercicio = obtenerEjercicio(tarjeta.dataset.id);
-        if (ejercicio.hecho) hechos++;
+    let hechos = 0;
+    let totalMinutos = 0;
+    tarjetas.forEach(function(tarjeta) {
+        const id = tarjeta.dataset.id;
+        const ejercicio = obtenerEjercicio(id);
+        if (ejercicio.hecho) {
+            hechos++;
+        }
         totalMinutos += Number(ejercicio.minutos) || 0;
     });
-    // La barra se llena según el porcentaje de ejercicios hechos
-    relleno.style.width = (hechos / tarjetas.length) * 100 + "%";
-    textoProgreso.textContent =
-        hechos + " de " + tarjetas.length + " hechos, " + totalMinutos + " minutos";
+    const porcentaje = (hechos / tarjetas.length) * 100;
+    relleno.style.width = porcentaje + "%";
+    textoProgreso.textContent = hechos + " de " + tarjetas.length
+        + " hechos, " + totalMinutos + " minutos";
 }
-// Redibuja toda la página
 function pintarTodo() {
     pintarSaludo();
-    tarjetas.forEach(pintarTarjeta);
+    tarjetas.forEach(function(tarjeta) {
+        pintarTarjeta(tarjeta);
+    });
     pintarProgreso();
 }
-// ===== Eventos =====
-// Cuando se escribe el nombre, se guarda al instante
-inputNombre.addEventListener("input", function () {
+//--------------------------------//
+//--|guardar_nombre_del_usuario|--//
+//--------------------------------//
+inputNombre.addEventListener("input", function() {
     datos.nombre = inputNombre.value.trim();
     guardarDatos();
     pintarSaludo();
 });
-// Eventos de cada tarjeta
-tarjetas.forEach(function (tarjeta) {
+//------------------------------------//
+//--|registrar_minutos_de_ejercicio|--//
+//------------------------------------//
+tarjetas.forEach(function(tarjeta) {
     const id = tarjeta.dataset.id;
-    // Al cambiar los minutos, se guardan
-    tarjeta.querySelector(".minutos").addEventListener("input", function (e) {
-        obtenerEjercicio(id).minutos = e.target.value;
+    const campoMinutos = tarjeta.querySelector(".minutos");
+    const botonHecho = tarjeta.querySelector(".btn-hecho");
+    campoMinutos.addEventListener("input", function() {
+        const ejercicio = obtenerEjercicio(id);
+        ejercicio.minutos = campoMinutos.value;
         guardarDatos();
         pintarProgreso();
     });
-    // Al pulsar el botón, se cambia entre hecho y pendiente
-    tarjeta.querySelector(".btn-hecho").addEventListener("click", function () {
+    botonHecho.addEventListener("click", function() {
         const ejercicio = obtenerEjercicio(id);
         ejercicio.hecho = !ejercicio.hecho;
         guardarDatos();
@@ -87,14 +119,22 @@ tarjetas.forEach(function (tarjeta) {
         pintarProgreso();
     });
 });
-// Botón de reinicio: pide confirmación y borra todo
-btnReiniciar.addEventListener("click", function () {
-    if (confirm("¿Seguro que quieres borrar todos los datos?")) {
+//-------------------------------//
+//--|reiniciar_todos_los_datos|--//
+//-------------------------------//
+btnReiniciar.addEventListener("click", function() {
+    const confirmar = confirm("¿Seguro que quieres borrar todos los datos?");
+    if (confirmar) {
         localStorage.removeItem(CLAVE);
-        datos = { nombre: "", ejercicios: {} };
+        datos = {
+            nombre: "",
+            ejercicios: {}
+        };
         pintarTodo();
     }
 });
-// ===== Inicio de la app =====
-cargarDatos(); // primero se leen los datos guardados
-pintarTodo();  // luego se dibuja la pantalla con esos datos
+//---------------------------//
+//--|iniciar_la_aplicacion|--//
+//---------------------------//
+cargarDatos();
+pintarTodo();
